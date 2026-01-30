@@ -24,10 +24,7 @@ class Solution:
         if not root:
             return False
             
-        root_check = self.is_same_tree(root, subRoot)
-        left = self.is_same_tree(root.left, subRoot)
-        right = self.is_same_tree(root.right, subRoot)
-        if root_check or left or right:
+        if self.is_same_tree(root, subRoot):
             return True
-        
+            
         return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
