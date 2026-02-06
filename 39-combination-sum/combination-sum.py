@@ -1,20 +1,23 @@
 class Solution:
-    def recurser(self, candidates, target, cur_combs, cur_sum, power_combs, i):
-        if cur_sum == target:
-            power_combs.append(cur_combs.copy())
+    def backtrack(self, candidates, target, i, cur_path, res):
+        if target == 0:
+            res.append(cur_path.copy())
             return
-        if cur_sum > target:
+
+        if target < 0:
             return
-        
+
+        if i >= len(candidates):
+            return
+
+
         for j in range(i, len(candidates)):
-            cur_combs.append(candidates[j])
-            cur_sum += candidates[j]
-            self.recurser(candidates, target, cur_combs, cur_sum, power_combs, j)
-            cur_combs.pop()
-            cur_sum -= candidates[j]
+            cur_path.append(candidates[j])
+            self.backtrack(candidates, target - candidates[j], j, cur_path, res)        
+            cur_path.pop()
         
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        power_combs = []
-        self.recurser(candidates, target, [], 0, power_combs, 0)
-        return power_combs
+        res = []
+        self.backtrack(candidates, target, 0, [], res)
+        return res
         
