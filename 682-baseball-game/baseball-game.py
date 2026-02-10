@@ -2,14 +2,13 @@ class Solution:
     def calPoints(self, operations: List[str]) -> int:
         record = []
         for operation in operations:
-            try:
+            if operation == "+":
+                record.append(record[-2] + record[-1])
+            elif operation == "D":
+                record.append(record[-1] * 2)
+            elif operation == "C":
+                record.pop()
+            else:
                 record.append(int(operation))
-            except ValueError:
-                if operation == "+":
-                    record.append(record[-1] + record[-2])
-                elif operation == "D":
-                    record.append(record[-1] * 2)
-                elif operation == "C":
-                    record.pop()
         
         return sum(record)
