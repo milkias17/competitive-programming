@@ -1,19 +1,15 @@
 class Solution:
-    def create_permutations(self, nums: List[int], i):
-        if i == len(nums):
+    def backtrack(self, nums, possibilities, cur_set, power_set):
+        if len(cur_set) == len(nums):
+            power_set.append(cur_set.copy())
             return
         
-        self.create_permutations(nums, i + 1)
-        new_perms = []
-        for perm in self.perms:
-            for j in range(len(perm) + 1):
-                tmp = perm.copy()
-                tmp.insert(j, nums[i])
-                new_perms.append(tmp)
-        
-        self.perms = new_perms
-        
+        for possibility in possibilities:
+            cur_set.append(possibility)
+            self.backtrack(nums, possibilities - set([possibility]), cur_set, power_set)
+            cur_set.pop()
+
     def permute(self, nums: List[int]) -> List[List[int]]:
-        self.perms = [[]]
-        self.create_permutations(nums, 0)
-        return self.perms
+       power_set = []
+       self.backtrack(nums, set(nums), [], power_set)
+       return power_set
