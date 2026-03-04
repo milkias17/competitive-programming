@@ -1,28 +1,14 @@
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
-        min_idx = None
-        res = None
+        cur_sum = 0
         max_sum = float("-inf")
-        prefix = []
 
-        cur = 0
-        for i, num in enumerate(nums):
-            cur += num
-            prefix.append(cur)
+        for num in nums:
+            if cur_sum >= 0:
+                cur_sum += num
+            else:
+                cur_sum = num
             
-            cur_sum = cur
-            if min_idx is not None:
-                cur_sum -= prefix[min_idx]
-            
-            if cur_sum > max_sum:
-                max_sum = cur_sum
-                res = (min_idx + 1 if min_idx is not None else 0, i)
-            
-            if cur < 0:
-                if min_idx is None:
-                    min_idx = i
-                elif cur < prefix[min_idx]:
-                    min_idx = i
-        
-        print(res)
+            max_sum = max(max_sum, cur_sum)
+
         return max_sum
