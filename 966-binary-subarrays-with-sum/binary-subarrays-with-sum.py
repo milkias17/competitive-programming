@@ -8,10 +8,9 @@ class Solution:
             if num == 1:
                 count += 1
             
-            counter[count] += 1
             if count - goal in counter:
                 res += counter[count - goal]
-                if count == count - goal:
-                    res -= 1
+                
+            counter[count] += 1
         
         return res
