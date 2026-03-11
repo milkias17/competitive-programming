@@ -1,32 +1,20 @@
 class Solution:
     def minOperations(self, nums: List[int]) -> int:
         left = 0
-        right = left + 2
-        cur = set()
         ops = 0
-
-        while right < len(nums):
-            while left < len(nums) and nums[left] != 0:
-                left += 1
-            right = left + 2
-            if right >= len(nums):
-                return ops if 0 not in nums else -1
+        for right in range(len(nums)):
+            if right - left + 1 < 3:
+                continue
             
-            tmp = left
-            while tmp <= right:
-                if nums[tmp] == 0:
-                    nums[tmp] = 1
-                else:
-                    nums[tmp] = 0
-                tmp += 1
+            if nums[left] == 0:
+                ops += 1
+                for i in range(left, right + 1):
+                    nums[i] = 1 if nums[i] == 0 else 0
             
             left += 1
-            right = left + 2
-            ops += 1
         
-        return ops if 0 not in nums else -1
+        if 0 not in nums:
+            return ops
+        else:
+            return -1
 
-            
-
-
-            
