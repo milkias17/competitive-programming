@@ -1,18 +1,21 @@
 class Solution:
     def numRabbits(self, answers: List[int]) -> int:
-        answers.sort()
-        i = 0
+        counter = Counter(answers)
         res = 0
 
-        while i < len(answers):
-            cur = answers[i]
-            tmp = cur
+        for k, v in counter.items():
+            if k == 0:
+                res += v
+                continue
             
-            i += 1
-            while tmp > 0 and i < len(answers) and answers[i] == cur:
-                tmp -= 1
-                i += 1
-            
-            res += cur + 1
+            if v <= k + 1:
+                res += k + 1
+                continue
+
+            groups = (v) // (k + 1)
+            res += (k + 1) * groups
+
+            if v % (k + 1) != 0:
+                res += k + 1
         
         return res
