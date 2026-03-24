@@ -1,20 +1,16 @@
 class Solution:
-    def recurser(self, i, n, k, cur_combs, power_combs):
-        if len(cur_combs) == k:
-            power_combs.append(cur_combs.copy())
+    def backtrack(self, n, k, i, cur_set, power_set):
+        if len(cur_set) == k:
+            power_set.append(cur_set.copy())
             return
-        if i > n:
-            return
-
-
-        for j in range(i, n + 1):
-            cur_combs.append(j)
-            self.recurser(j + 1, n, k, cur_combs, power_combs)
-            cur_combs.pop()
         
+        for j in range(i, n + 1):
+            cur_set.append(j)
+            self.backtrack(n, k, j + 1, cur_set, power_set)
+            cur_set.pop()
+
 
     def combine(self, n: int, k: int) -> List[List[int]]:
-        cur_combs, power_combs = [], []
-        self.recurser(1, n, k, cur_combs, power_combs)
-        return power_combs
-        
+        power_set = []
+        self.backtrack(n, k, 1, [], power_set)
+        return power_set
