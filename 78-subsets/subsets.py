@@ -1,16 +1,16 @@
 class Solution:
-    def backtrack(self, nums, i, cur_set, power_set):
+    def backtrack(self, nums, i, curset, powerset):
         if i >= len(nums):
-            power_set.append(cur_set.copy())
+            powerset.append(curset.copy())
             return
         
-        cur_set.append(nums[i])
-        self.backtrack(nums, i + 1, cur_set, power_set)
-        cur_set.pop()
-        self.backtrack(nums, i + 1, cur_set, power_set)
+        curset.append(nums[i])
+        self.backtrack(nums, i + 1, curset, powerset)
+        curset.pop()
+        self.backtrack(nums, i + 1, curset, powerset)
+
 
     def subsets(self, nums: List[int]) -> List[List[int]]:
-        power_set = []
-        self.backtrack(nums, 0, [], power_set)
-        return power_set
-        
+        powerset = []
+        self.backtrack(nums, 0, [], powerset)
+        return powerset
