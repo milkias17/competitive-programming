@@ -1,27 +1,22 @@
-import math
 class Solution:
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
-        if len(matrix) == 0:
-            return False
-        
-        if len(matrix[0]) == 0:
-            return False
-        
-        m = len(matrix)
-        n = len(matrix[0])
-        length = m * n
+        rows, cols = len(matrix), len(matrix[0])
         left = 0
-        right = length - 1
+        right = (rows * cols) - 1
+
         while left <= right:
             mid = (left + right) // 2
-            row = math.ceil((mid + 1) / n) - 1
-            col = mid - (row * n)
+
+            row = mid // cols
+            col = mid - (row * cols)
+
+            print(f"Row: {row}, col: {col} for {mid}")
+
             if matrix[row][col] == target:
                 return True
-            elif matrix[row][col] > target:
+            elif target < matrix[row][col]:
                 right = mid - 1
             else:
                 left = mid + 1
         
         return False
-            
