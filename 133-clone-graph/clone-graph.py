@@ -12,24 +12,18 @@ class Solution:
         if not node:
             return None
 
-        node_ref = {}
+        node_ref = {node: Node(node.val)}
         queue = deque()
-        queue.append((node, None))
-        visited = set()
+        queue.append(node)
         
         while queue:
-            node, parent = queue.popleft()
-            cpy = node_ref.get(node.val, None)
-            if not cpy:
-                cpy = Node(val=node.val)
+            curr = queue.popleft()
             
-            if parent:
-                parent.neighbors.append(cpy)
-                cpy.neighbors.append(parent)
-            
-            node_ref[node.val] = cpy
-            for neighbor in node.neighbors:
-                if neighbor.val not in node_ref:
-                    queue.append((neighbor, cpy))
-        
-        return node_ref[1]
+            for neighbor in curr.neighbors:
+                if neighbor not in node_ref:
+                    node_ref[neighbor] = Node(neighbor.val)
+                    queue.append(neighbor)
+                
+                node_ref[curr].neighbors.append(node_ref[neighbor])
+
+        return node_ref[node]
