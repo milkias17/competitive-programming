@@ -1,1 +1,1 @@
-<h2>sort-colors Notes</h2><hr>[ Time taken: 37 m 43 s ]
+<h2>sort-colors Notes</h2><hr>[ Time taken: 5m 16s ]
