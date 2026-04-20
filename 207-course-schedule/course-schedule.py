@@ -1,27 +1,31 @@
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        adj = {i: [] for i in range(0, numCourses)}
-        in_degree = {i: 0 for i in range(0, numCourses)}
+        visited = set()
+        path = set()
 
-        for course, req in prerequisites:
-            in_degree[course] = in_degree[course] + 1
-            adj[req].append(course)
+        adj = {course: [] for course in range(numCourses)}
+        for start, end in prerequisites:
+            adj[end].append(start)
+
+        def dfs(cur):
+            if cur in path:
+                return False
+            if cur in visited:
+                return True
             
-        
-        queue = deque()
-        for k, v in in_degree.items():
-            if v == 0:
-                queue.append(k)
-        
-        while queue:
-            cur = queue.popleft()
-            numCourses -= 1
-            for course in adj[cur]:
-                in_degree[course] -= 1
-                if in_degree[course] == 0:
-                    queue.append(course)
-        
-        return numCourses == 0
-
-
+            visited.add(cur)
+            path.add(cur)
+            for neighbor in adj[cur]:
+                if not dfs(neighbor):
+                    return False
             
+            path.remove(cur)
+            return True
+        
+        for i in range(numCourses):
+            if i in visited:
+                continue
+            if not dfs(i):
+                return False
+        
+        return True
