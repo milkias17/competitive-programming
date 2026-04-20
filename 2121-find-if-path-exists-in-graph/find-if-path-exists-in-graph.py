@@ -6,17 +6,16 @@ class Solution:
             adj[n1].append(n2)
             adj[n2].append(n1)
         
-        def dfs(node, visited):
-            if node == destination:
+        stack = [source]
+        visited = set([source])
+        while stack:
+            cur = stack.pop()
+            if cur == destination:
                 return True
-            if node in visited:
-                return False
-            
-            visited.add(node)
-            for neigh in adj[node]:
-                if dfs(neigh, visited):
-                    return True
-            
-            return False
+            for neigh in adj[cur]:
+                if neigh in visited:
+                    continue
+                visited.add(neigh)
+                stack.append(neigh)
         
-        return dfs(source, set())
+        return False
