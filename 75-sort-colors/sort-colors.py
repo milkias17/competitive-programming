@@ -1,22 +1,27 @@
 class Solution:
-    def quick_sort(self, nums: List[int], start, end):
-        if start >= end:
-            return
-
-        pivot = end
-        left = start
-        for right in range(start, end):
-            if nums[right] < nums[pivot]:
-                nums[left], nums[right] = nums[right], nums[left]
-                left += 1
-        
-        nums[left], nums[pivot] = nums[pivot], nums[left]
-        pivot = left
-        self.quick_sort(nums, start, pivot - 1)
-        self.quick_sort(nums, pivot + 1, end)
-
     def sortColors(self, nums: List[int]) -> None:
         """
         Do not return anything, modify nums in-place instead.
         """
-        self.quick_sort(nums, 0, len(nums) - 1)
+        def quick_sort(start, end):
+            if start >= end:
+                return
+                
+            pivot = nums[end]
+            left, cur = start, start
+    
+            while cur < end:
+                if nums[cur] <= pivot:
+                    nums[cur], nums[left] = nums[left], nums[cur]
+                    left += 1
+                
+                cur += 1
+            
+            nums[left], nums[end] = nums[end], nums[left]
+            quick_sort(start, left - 1)
+            quick_sort(left + 1, end)
+        
+        quick_sort(0, len(nums) - 1)
+
+        
+        
