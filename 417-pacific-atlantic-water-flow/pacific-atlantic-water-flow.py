@@ -1,39 +1,31 @@
 class Solution:
     def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
-        rows, cols = len(heights), len(heights[0])
-        p_visited = set()
-        a_visited = set()
+        p_cells = set()
+        a_cells = set()
 
         def dfs(row, col, visited):
-            visited.add((row, col))
-            directions = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+            if (row, col) in visited:
+                return
             
+            visited.add((row, col))
+            directions = [[1, 0], [-1, 0], [0, 1], [0, -1]]
             for dx, dy in directions:
-                r, c = row + dx, col + dy
-                
-                if (r < 0 or r >= rows or 
-                    c < 0 or c >= cols or 
-                    (r, c) in visited or 
-                    heights[r][c] < heights[row][col]):
+                n_row, n_col = row + dx, col + dy
+                if min(n_row, n_col) < 0 or n_row >= len(heights) or n_col >= len(heights[0]) or heights[row][col] > heights[n_row][n_col]:
                     continue
                 
-                dfs(r, c, visited)
-
-        for i in range(rows):
-            dfs(i, 0, p_visited)
-        for j in range(cols):
-            dfs(0, j, p_visited)
-
-        for i in range(rows):
-            dfs(i, cols - 1, a_visited)
-        for j in range(cols):
-            dfs(rows - 1, j, a_visited)
-
-        out = []
-        for i in range(rows):
-            for j in range(cols):
-                if (i, j) in p_visited and (i, j) in a_visited:
-                    out.append([i, j])
-
-        return out
-
+                dfs(n_row, n_col, visited)
+        
+        for i in range(len(heights[0])):
+            dfs(0, i, p_cells)
+        
+        for i in range(len(heights)):
+            dfs(i, 0, p_cells)
+        
+        for i in range(len(heights[0])):
+            dfs(len(heights) - 1, i, a_cells)
+        
+        for i in range(len(heights)):
+            dfs(i, len(heights[0]) - 1, a_cells)
+        
+        return list(a_cells.intersection(p_cells))
