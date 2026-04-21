@@ -3,80 +3,35 @@ class Solution:
         """
         Do not return anything, modify board in-place instead.
         """
-        visisted = set()
         rows, cols = len(board), len(board[0])
 
-        def not_valid(row, col):
-            return row >= rows or col >= cols or row < 0 or col < 0
-
-        def dfs(row, col, region):
-            if not_valid(row, col):
-                return False
-
-            region.add((row, col))
-            visisted.add((row, col))
-            directions = [[0, -1], [0, 1], [1, 0], [-1, 0]]
-            for dx, dy in directions:
-                n_row, n_col = row + dx, col + dy
-                if (n_row, n_col) in region or not_valid(n_row, n_col) or board[n_row][n_col] == "X":
-                    continue
-
-                if not dfs(n_row, n_col, region):
-                    return False
-
-            return True
-
-        for i in range(rows):
-            for j in range(cols):
-                if (i, j) in visisted or board[i][j] == "X":
-                    continue
-
-                region = set()
-                res = dfs(i, j, region)
-                if not res:
-                    continue
-
-                for row, col in region:
-                    board[row][col] = "X"
-class Solution:
-    def solve(self, board: List[List[str]]) -> None:
-        """
-        Do not return anything, modify board in-place instead.
-        """
         visited = set()
-        rows, cols = len(board), len(board[0])
 
-        def not_valid(row, col):
-            return row >= rows or col >= cols or row < 0 or col < 0
-
-        def dfs(row, col, region):
-            if not_valid(row, col):
-                return False
-
-            region.add((row, col))
+        def dfs(row, col, to):
+            if min(row, col) < 0 or row >= rows or col >= cols or (row, col) in visited or board[row][col] == "X":
+                return
+            
             visited.add((row, col))
-            directions = [[0, -1], [0, 1], [1, 0], [-1, 0]]
+            board[row][col] = to
+            directions = [[1, 0], [-1, 0], [0, 1], [0, -1]]
             for dx, dy in directions:
                 n_row, n_col = row + dx, col + dy
-                if (n_row, n_col) in region or (
-                    not not_valid(n_row, n_col) and board[n_row][n_col] == "X"
-                ):
-                    continue
+                dfs(n_row, n_col, to)
 
-                if not dfs(n_row, n_col, region):
-                    return False
-
-            return True
 
         for i in range(rows):
             for j in range(cols):
-                if (i, j) in visited or board[i][j] == "X":
-                    continue
-
-                region = set()
-                res = dfs(i, j, region)
-                if not res:
-                    continue
-
-                for row, col in region:
-                    board[row][col] = "X"
+                if i == 0 or i == rows - 1 or j == 0 or j == cols - 1:
+                    dfs(i, j, "C")
+        
+        visited.clear()
+        for i in range(rows):
+            for j in range(cols):
+                if (i, j) not in visited and board[i][j] == "O":
+                    dfs(i, j, "X")
+        
+        for i in range(rows):
+            for j in range(cols):
+                if board[i][j] == "C":
+                    board[i][j] = "O"
+        
