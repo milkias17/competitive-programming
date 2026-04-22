@@ -8,7 +8,6 @@ class Solution:
         
         res = []
 
-        print(freq)
         for i in range(len(freq) - 1, -1, -1):
             res.extend(freq[i])
             if len(res) >= k:
