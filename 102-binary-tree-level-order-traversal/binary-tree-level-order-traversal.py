@@ -8,24 +8,21 @@ class Solution:
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
         if not root:
             return []
-            
-        per_height = defaultdict(list)
+
 
         queue = deque()
         if root:
-            queue.append((root, 0))
+            queue.append(root)
 
+        res = []
         while queue:
-            cur, height = queue.popleft()
-            per_height[height].append(cur.val)
-
-            if cur.left:
-                queue.append((cur.left, height + 1))
-            if cur.right:
-                queue.append((cur.right, height + 1))
-        
-        res = [-1] * (max(per_height.keys()) + 1)
-        for k, v in per_height.items():
-            res[k] = v
+            res.append([])
+            for _ in range(len(queue)):
+                cur = queue.popleft()
+                res[-1].append(cur.val)
+                if cur.left:
+                    queue.append(cur.left)
+                if cur.right:
+                    queue.append(cur.right)
 
         return res
