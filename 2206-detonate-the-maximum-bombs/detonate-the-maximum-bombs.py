@@ -1,23 +1,31 @@
 class Solution:
     def maximumDetonation(self, bombs: List[List[int]]) -> int:
-        self.max_count = 0 
+        adj = {idx: [] for idx in range(len(bombs))}
 
-        def dfs(i, taken):
-            x, y, r = bombs[i]
-
-            count = 1
-            taken.add(i)
-            for j, bomb in enumerate(bombs):
-                if j in taken:
+        for i in range(len(bombs)):
+            x1, y1, r1 = bombs[i]
+            for j in range(len(bombs)):
+                if i == j:
                     continue
-                tx, ty, _ = bomb
-                if sqrt(pow(tx - x, 2) + pow(ty - y, 2)) <= r:
-                    count += dfs(j, taken)
+                
+                x2, y2, r2 = bombs[j]
+                distance = math.sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2))
+                if distance <= r1:
+                    adj[i].append(j)
+        
+        max_count = 0
+        def dfs(node, visited):
+            visited.add(node)
+            count = 1
+            for neigh in adj[node]:
+                if neigh in visited:
+                    continue
+
+                count += dfs(neigh, visited)
             
             return count
         
         for i in range(len(bombs)):
-            self.max_count = max(self.max_count, dfs(i, set()))
+            max_count = max(max_count, dfs(i, set()))
         
-        return self.max_count
-
+        return max_count
