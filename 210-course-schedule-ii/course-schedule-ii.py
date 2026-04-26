@@ -1,32 +1,25 @@
 class Solution:
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
         adj = {i: [] for i in range(numCourses)}
+        in_order = {i: 0 for i in range(numCourses)}
         for course, prerequisite in prerequisites:
             adj[prerequisite].append(course)
+            in_order[course] += 1
         
-        stack = []
-        colors = [0] * numCourses
-
-        def dfs(course):
-            colors[course] = 1
-
-            for prerequisite in adj[course]:
-                if colors[prerequisite] == 1:
-                    return False
-                
-                if colors[prerequisite] == 0 and not dfs(prerequisite):
-                    return False
+        queue = deque()
+        for k, v in in_order.items():
+            if v == 0:
+                queue.append(k)
+        
+        res = []
+        while queue:
+            prerequisite = queue.popleft()
+            for course in adj[prerequisite]:
+                in_order[course] -= 1
+                if in_order[course] <= 0:
+                    queue.append(course)
             
-            colors[course] = 2
-            stack.append(course)
-            return True
+            res.append(prerequisite)
         
-        for course in adj:
-            if colors[course] != 0:
-                continue
-            
-            if not dfs(course):
-                return []
-        
-        stack.reverse()
-        return stack
+        return res if len(res) == numCourses else []
+
