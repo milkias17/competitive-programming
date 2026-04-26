@@ -1,31 +1,29 @@
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        visited = set()
-        path = set()
+        adj = {i: [] for i in range(numCourses)}
 
-        adj = {course: [] for course in range(numCourses)}
-        for start, end in prerequisites:
-            adj[end].append(start)
-
-        def dfs(cur):
-            if cur in path:
-                return False
-            if cur in visited:
-                return True
-            
-            visited.add(cur)
-            path.add(cur)
-            for neighbor in adj[cur]:
-                if not dfs(neighbor):
-                    return False
-            
-            path.remove(cur)
-            return True
+        for course, prerequisite in prerequisites:
+            adj[course].append(prerequisite)
         
-        for i in range(numCourses):
-            if i in visited:
-                continue
-            if not dfs(i):
+        colors = [0 for i in range(numCourses)]
+
+        def dfs(course):
+            colors[course] = 1
+
+            for prerequisite in adj[course]:
+                if colors[prerequisite] == 1:
+                    return True
+                
+                if colors[prerequisite] == 0 and dfs(prerequisite):
+                    return True
+            
+            colors[course] = 2
+            return False
+        
+        for course in range(numCourses):
+            if colors[course] == 0 and dfs(course):
                 return False
         
         return True
+
+                
