@@ -1,16 +1,13 @@
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
 
-        def dfs(i, memo={}):
-            if i >= len(cost):
-                return 0
-                
-            if i == len(cost) - 1:
-                return cost[i]
+        dp = [cost[-2], cost[-1]]
+        i = len(cost) - 3
 
-            if i not in memo:
-                memo[i] = cost[i] + min(dfs(i + 1), dfs(i + 2))
-
-            return memo[i]
-
-        return min(dfs(0), dfs(1))
+        while i >= 0:
+            tmp = dp[0]
+            dp[0] = cost[i] + min(dp)
+            dp[1] = tmp
+            i -= 1
+        
+        return min(dp)
