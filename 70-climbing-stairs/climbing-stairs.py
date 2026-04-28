@@ -1,16 +1,14 @@
 class Solution:
     def climbStairs(self, n: int) -> int:
         
-        def backtrack(cur, memo={}):
-            if cur > n:
-                return 0
-            if cur == n:
-                return 1
+        dp = [1, 1]
+        i = n - 2
 
-            if cur not in memo:
-                memo[cur] = backtrack(cur + 1) + backtrack(cur + 2)
-            
-            return memo[cur]
+        while i >= 0:
+            tmp = dp[0]
+            dp[0] = dp[0] + dp[1]
+            dp[1] = tmp
+            i -= 1
         
-        count = backtrack(0)
-        return count
+        return dp[0]
+            
