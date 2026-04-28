@@ -1,13 +1,11 @@
 class Solution:
     def minCostClimbingStairs(self, cost: List[int]) -> int:
 
-        dp = [cost[-2], cost[-1]]
-        i = len(cost) - 3
+        prev1, prev2 = 0, 0
 
-        while i >= 0:
-            tmp = dp[0]
-            dp[0] = cost[i] + min(dp)
-            dp[1] = tmp
-            i -= 1
+        for coins in cost:
+            current = coins + min(prev1, prev2)
+
+            prev1, prev2 = current, prev1
         
-        return min(dp)
+        return min(prev1, prev2)
