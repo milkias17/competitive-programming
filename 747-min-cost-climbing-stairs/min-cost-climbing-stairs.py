@@ -4,6 +4,9 @@ class Solution:
         def dfs(i, memo={}):
             if i >= len(cost):
                 return 0
+                
+            if i == len(cost) - 1:
+                return cost[i]
 
             if i not in memo:
                 memo[i] = cost[i] + min(dfs(i + 1), dfs(i + 2))
