@@ -1,20 +1,15 @@
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-        memo = {}
+        dp = [False] * (len(s) + 1)
+        dp[0] = True
 
-        def can_break(s):
-            if s == "":
-                return True
+        for i in range(len(s)):
+            if not dp[i]:
+                continue
             
-            if s in memo:
-                return memo[s]
-            
+            cur = s[i:]
             for word in wordDict:
-                if s.startswith(word) and can_break(s[len(word):]):
-                    memo[s] = True
-                    return True
-            
-            memo[s] = False
-            return False
-        
-        return can_break(s)
+                if cur.startswith(word):
+                    dp[i + len(word)] = True
+
+        return dp[len(s)]
