@@ -5,17 +5,10 @@ class Solution:
         tasks.sort()
 
         heappush(heap, (tasks[0][1], tasks[0][2], 0))
-        cur = 1
-        for i in range(1, len(tasks)):
-            if tasks[i][0] == tasks[0][0]:
-                heappush(heap, (tasks[i][1], tasks[i][2], i))
-                cur = i + 1
-            else:
-                cur = i
-                break
         
         res = []
-        cur_time = 1
+        cur_time = tasks[0][0]
+        cur = 1
         while heap:
             process_time, org, i = heappop(heap)
             if tasks[i][0] > cur_time:
