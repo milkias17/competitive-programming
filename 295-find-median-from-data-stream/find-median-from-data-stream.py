@@ -1,32 +1,30 @@
 class MedianFinder:
 
     def __init__(self):
-        self.small = []
-        self.large = []
+        self.left = []
+        self.right = []
+        
 
     def addNum(self, num: int) -> None:
-        heappush_max(self.small, num)
-        if self.small and self.large and self.small[0] > self.large[0]:
-            val = heappop_max(self.small)
-            heappush(self.large, val)
+        if len(self.left) == 0 or num < self.left[0]:
+            heappush_max(self.left, num)
+        else:
+            heappush(self.right, num)
         
-        if len(self.small) > len(self.large) + 1:
-            val = heappop_max(self.small)
-            heappush(self.large, val)
-        elif len(self.large) > len(self.small) + 1:
-            val = heappop(self.large)
-            heappush_max(self.small, val)
-        
+        if len(self.left) > len(self.right) + 1:
+            tmp = heappop_max(self.left)
+            heappush(self.right, tmp)
+        elif len(self.right) > len(self.left) + 1:
+            tmp = heappop(self.right)
+            heappush_max(self.left, tmp)
 
     def findMedian(self) -> float:
-        if len(self.small) > len(self.large):
-            return self.small[0]
-        if len(self.large) > len(self.small):
-            return self.large[0]
+        if len(self.left) > len(self.right):
+            return self.left[0]
+        elif len(self.right) > len(self.left):
+            return self.right[0]
         
-        val1 = self.small[0]
-        val2 = self.large[0]
-        return (val1 + val2) / 2
+        return (self.left[0] + self.right[0]) / 2
         
 
 
