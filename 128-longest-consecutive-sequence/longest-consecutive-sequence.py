@@ -1,26 +1,51 @@
-class Solution:
-    def find(self, parent, val):
-        if parent[val] != val:
-            parent[val] = self.find(parent, parent[val])
-
-        return parent[val]
-
-    def union(self, nums, parent, val1, val2):
-        root1 = self.find(parent, val1)
-        root2 = self.find(parent, val2)
-
-        if root1 != root2:
-            parent[root2] = root1
-            self.size[root1] += self.size[root2]
-
-    def longestConsecutive(self, nums: List[int]) -> int:
-        parent = {val: val for idx, val in enumerate(nums)}
-        self.size = {val: 1 for val in nums}
-        for num in nums:
-            if num + 1 in parent:
-                self.union(nums, parent, num, num + 1)
+class UnionFind:
+    def __init__(self, n):
+        self.parent = [i for i in range(n)]
+        self.size = [1 for i in range(n)]
+        self.longest = 0
+    
+    def find(self, x):
+        while x != self.parent[x]:
+            self.parent[x] = self.parent[self.parent[x]]
+            x = self.parent[x]
         
-        if len(self.size) == 0:
-            return 0
+        return x
+    
+    def union(self, x, y):
+        p1, p2 = self.find(x), self.find(y)
 
-        return max(self.size.values())
+        if p1 == p2:
+            return False
+        
+        if self.size[p1] >= self.size[p2]:
+            self.parent[p2] = p1
+            self.size[p1] += self.size[p2]
+            if self.size[self.longest] < self.size[p1]:
+                self.longest = p1
+        elif self.size[p2] > self.size[p1]:
+            self.parent[p1] = p2
+            self.size[p2] += self.size[p1]
+            if self.size[self.longest] < self.size[p2]:
+                self.longest = p2
+        
+        return True
+
+
+
+class Solution:
+    def longestConsecutive(self, nums: List[int]) -> int:
+        if len(nums) == 0:
+            return 0
+            
+        uf = UnionFind(len(nums))
+        num_idx = {num: i for i, num in enumerate(nums)}
+
+        for num, i in num_idx.items():
+            if num - 1 in num_idx:
+                uf.union(i, num_idx[num - 1])
+
+            if num not in num_idx:
+                num_idx[num] = i
+            
+        
+        return uf.size[uf.longest]
