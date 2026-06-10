@@ -1,24 +1,20 @@
 class Solution:
     def findMaxForm(self, strs: List[str], m: int, n: int) -> int:
-        memo = [[-1 for _ in range(n + 1)] for _ in range(m + 1)]
-        for i in range(m + 1):
-            for j in range(n + 1):
-                memo[i][j] = 0
-        
-        for i in range(len(strs) - 1, -1, -1):
-            cur = strs[i]
-            zero_count = cur.count("0")
-            one_count = cur.count("1")
+        dp = [[0 for _ in range(n + 1)] for _ in range(m + 1)]
 
-            new_memo = [[-1 for _ in range(n + 1)] for _ in range(m + 1)]
-            for zeroes in range(m + 1):
-                for ones in range(n + 1):
-                    include = 0
-                    if zero_count <= zeroes and one_count <= ones:
-                        include = 1 + memo[zeroes - zero_count][ones - one_count]
-                    skip = memo[zeroes][ones]
-                    new_memo[zeroes][ones] = max(include, skip)
+        for i in range(len(strs) - 1, -1, -1):
+            new_dp = []
+            count_0 = strs[i].count("0")
+            count_1 = strs[i].count("1")
+            for j in range(m + 1):
+                tmp = []
+                for k in range(n + 1):
+                    res = dp[j][k]
+                    if j - count_0 >= 0 and k - count_1 >= 0:
+                        res = max(res, 1 + dp[j - count_0][k - count_1])
+                    tmp.append(res)
+                new_dp.append(tmp)
             
-            memo = new_memo
+            dp = new_dp
         
-        return memo[m][n]
+        return dp[m][n]
