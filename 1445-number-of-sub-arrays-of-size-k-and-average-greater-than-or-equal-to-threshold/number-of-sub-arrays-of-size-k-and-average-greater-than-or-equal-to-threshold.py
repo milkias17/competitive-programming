@@ -1,16 +1,21 @@
 class Solution:
     def numOfSubarrays(self, arr: List[int], k: int, threshold: int) -> int:
-        cur_sum = 0
-        num_valid = 0
         left = 0
+        cur_sum = 0
+        count = 0
+
         for right in range(len(arr)):
             cur_sum += arr[right]
+            if right - left + 1 < k:
+                continue
+            
+            if (cur_sum / k) >= threshold:
+                count += 1
 
-            if right - left + 1 == k:
-                if cur_sum / k >= threshold:
-                    num_valid += 1
-                cur_sum -= arr[left]
-                left += 1
+            cur_sum -= arr[left]
+            left += 1
         
-        return num_valid
+        return count
         
+
+            
