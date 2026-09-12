@@ -1,27 +1,30 @@
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
         memo = {}
+        INF = float("inf")
 
-        def dp(i, remaining):
-            if remaining == 0:
+        def dp(target):
+            if target == 0:
                 return 0
-
-            if i >= len(coins) or remaining < 0:
-                return float("inf")
-
-            if (i, remaining) in memo:
-                return memo[(i, remaining)]
             
-            res =  min(
-                1 + dp(i, remaining - coins[i]),
-                1 + dp(i + 1, remaining - coins[i]),
-                dp(i + 1, remaining)
-            )
-            memo[(i, remaining)] = res
+            if target < 0:
+                return INF
+
+
+            if target in memo:
+                return memo[target]            
+            
+            res = INF
+            for coin in coins:
+                tmp = dp(target - coin)
+                if tmp != INF:
+                    res = min(res, 1 + tmp)
+
+            memo[target] = res
             return res
         
-        res = dp(0, amount)
-        if res == float("inf"):
+        res = dp(amount)
+        if res == INF:
             return -1
 
         return res
