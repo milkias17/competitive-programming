@@ -1,29 +1,23 @@
 class Solution:
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         adj = {i: [] for i in range(numCourses)}
+        in_degree = {i: 0 for i in range(numCourses)}
 
-        for course, prerequisite in prerequisites:
-            adj[course].append(prerequisite)
+        for course, prereq in prerequisites:
+            adj[prereq].append(course)
+            in_degree[course] += 1
         
-        colors = [0 for i in range(numCourses)]
+        queue = deque([i for i in range(numCourses) if in_degree[i] == 0])
+        count = 0
 
-        def dfs(course):
-            colors[course] = 1
+        while queue:
+            prereq = queue.popleft()
+            count += 1
+            for course in adj[prereq]:
+                in_degree[course] -= 1
+                if in_degree[course] == 0:
+                    queue.append(course)
+        
+        return count == numCourses
 
-            for prerequisite in adj[course]:
-                if colors[prerequisite] == 1:
-                    return True
-                
-                if colors[prerequisite] == 0 and dfs(prerequisite):
-                    return True
             
-            colors[course] = 2
-            return False
-        
-        for course in range(numCourses):
-            if colors[course] == 0 and dfs(course):
-                return False
-        
-        return True
-
-                
