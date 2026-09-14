@@ -1,22 +1,17 @@
 class Solution:
     def nextGreaterElements(self, nums: List[int]) -> List[int]:
-        stack = []
-        res = [-1] * len(nums)
+        double = nums.copy()
+        double.extend(nums[:len(nums) - 1])
 
-        # for i, num in enumerate(nums):
-        for idx in range(len(nums) * 2):
-            i = idx % len(nums)
-            num = nums[i]
-            while stack and num > nums[stack[-1]]:
-                tmp = stack.pop()
-                if res[tmp] == -1:
-                    res[tmp] = i
+        stack = []
+        ans = [-1] * len(nums)
+        for i, num in enumerate(double):
+            while stack and num > double[stack[-1]]:
+                idx = stack.pop() % len(nums)
+                if ans[idx] == -1:
+                    ans[idx] = num
             
             stack.append(i)
         
-        for i in range(len(res)):
-            if res[i] != -1:
-                res[i] = nums[res[i]]
-
-        return res
-
+        return ans
+                
